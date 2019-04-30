@@ -80,7 +80,7 @@ class Chatbot:
         self.send_type_action(chatbot, update)
         name = update.message["chat"]["first_name"]
         start_text = (
-            f"Olá {name}, estou aqui para te lembrar de mandar sua daily todo dia! TODO. SANTO. DIA."
+            f"Olá, estou aqui para te lembrar de mandar sua daily todo dia! TODO. SANTO. DIA."
         )
         chatbot.send_message(
             chat_id=update.message.chat_id,
