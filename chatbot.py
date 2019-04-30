@@ -41,8 +41,8 @@ class Chatbot:
         self.job = self.updater.job_queue
         self.job_survive = self.job.run_repeating(self.callback_keep_alive, interval=60, first=0)
 
-        daily_hour = os.environ.get("HOUR")
-        daily_minute = os.environ.get("MINUTE")
+        daily_hour = int(os.environ.get("HOUR"))
+        daily_minute = int(os.environ.get("MINUTE"))
         daily_time = datetime.time(hour=daily_hour, minute=daily_minute)
         self.job_daily = self.job.run_daily(self.send_daily, time=daily_time)
 
