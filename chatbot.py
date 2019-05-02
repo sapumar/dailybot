@@ -17,11 +17,11 @@ class Chatbot:
             level=logging.INFO,
         )
         self.logger = logging.getLogger("LOG")
+        self.logger.info("Starting bot.")
         self.updater = Updater(token)
         self.dispatcher = self.updater.dispatcher
 
         self.job = self.updater.job_queue
-        self.job_survive = self.job.run_repeating(self.callback_keep_alive, interval=60, first=0)
 
         daily_hour = int(os.environ.get("HOUR"))
         daily_minute = int(os.environ.get("MINUTE"))
@@ -35,12 +35,6 @@ class Chatbot:
         self.dispatcher.add_handler(example_handler)
 
         self.dispatcher.add_error_handler(self.error)
-
-    def callback_keep_alive(self, chatbot, job):
-        self.logger.info("Staying alive.")
-
-    def callback_daily(self, chatbot, job):
-        self.logger.info("Daily.")
 
     @staticmethod
     def send_type_action(chatbot, update):
@@ -58,7 +52,8 @@ class Chatbot:
         @bot = information about the bot
         @update = the user info.
         """
-        self.logger.info(f"{update['message']['chat']['id']}")
+        self.logger.info("Start command received.")
+        self.logger.info(f"{update}")
         self.send_type_action(chatbot, update)
         name = update.message["chat"]["first_name"]
         start_text = (
@@ -71,14 +66,14 @@ class Chatbot:
         )
         return 0
 
-    @staticmethod
-    def send_daily(chatbot, job):
+    def send_daily(self, chatbot, job):
         """
         Info command to know more about the developers.
         @bot = information about the bot
         @update = the user info.
         """
         chat_id = os.environ.get("CHAT_ID")
+        self.logger.info(f"Sending daily to {chat_id}")
         with open("daily.md") \
                 as daily_file:
             daily_text = daily_file.read()
@@ -96,6 +91,7 @@ class Chatbot:
         @update = the user info.
         """
         self.send_type_action(chatbot, update)
+        self.logger.info("Example command received.")
         with open("exemplo.md") \
                 as example_file:
             example_text = example_file.read()
@@ -123,6 +119,7 @@ class Chatbot:
 
     def run(self):
         # Start the Bot
+        self.logger.info("Polling bot.")
         self.updater.start_polling()
 
         # Run the bot until you press Ctrl-C or the process receives SIGINT,
