@@ -9,24 +9,6 @@ import telegram
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
 
-def retrieve_default(section="MAIN", filename="config.ini"):
-    """
-    Function to retrieve all information from token file.
-    Usually retrieves from config.ini
-    """
-    try:
-        config = ConfigParser()
-        with open(filename) as config_file:
-            config.read_file(config_file)
-        return config[section]
-    except FileNotFoundError:
-        print("Não há arquivo de configuração.")
-        raise FileNotFoundError
-    except KeyError:
-        print(f"Faltou a chave {section} no arquivo de configuração.")
-        raise KeyError
-
-
 class Chatbot:
 
     def __init__(self, token):
@@ -157,20 +139,15 @@ if __name__ == "__main__":
     # Port is given by Heroku
     PORT = os.environ.get("PORT")
     if TOKEN is not None:
-        bot = Chatbot(TOKEN)
-        bot.updater.start_webhook(
-            listen="0.0.0.0",
-            port=int(PORT),
-            url_path=TOKEN)
-        bot.updater.bot.set_webhook(f"https://{NAME}.herokuapp.com/{TOKEN}")
-        bot.updater.idle()
-
-    # Run on local system once detected that it's not on Heroku
-    else:
-        try:
-            token = retrieve_default()["token"]
-            x = Chatbot(token)
-            x.run()
-        except FileNotFoundError:
-            print("Configuration file not found.")
-            sys.exit(1)
+        if PORT is not None:
+            bot = Chatbot(TOKEN)
+            bot.updater.start_webhook(
+                listen="0.0.0.0",
+                port=int(PORT),
+                url_path=TOKEN)
+            bot.updater.bot.set_webhook(f"https://{NAME}.herokuapp.com/{TOKEN}")
+            bot.updater.idle()
+        else:
+            # Run on local system once detected that it's not on Heroku
+            bot = Chatbot(TOKEN)
+            bot.run()
