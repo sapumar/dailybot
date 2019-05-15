@@ -9,7 +9,7 @@ import telegram
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
 
-class Chatbot:
+class DailyBot:
 
     def __init__(self, token):
         logging.basicConfig(
@@ -26,12 +26,12 @@ class Chatbot:
         daily_hour = int(os.environ.get("HOUR"))
         daily_minute = int(os.environ.get("MINUTE"))
         daily_time = datetime.time(hour=daily_hour, minute=daily_minute)
-        self.job_daily = self.job.run_daily(self.send_daily, time=daily_time)
+        self.job_daily = self.job.run_daily(self.send_daily, time=daily_time, days=(0, 1, 2, 3, 4))
 
         start_handler = CommandHandler("start", self.send_start)
         self.dispatcher.add_handler(start_handler)
 
-        example_handler = CommandHandler("exemplo", self.send_example)
+        example_handler = CommandHandler("example", self.send_example)
         self.dispatcher.add_handler(example_handler)
 
         self.dispatcher.add_error_handler(self.error)
@@ -52,19 +52,21 @@ class Chatbot:
         @bot = information about the bot
         @update = the user info.
         """
+        chat_id = os.environ.get("CHAT_ID")
         self.logger.info("Start command received.")
         self.logger.info(f"{update}")
         self.send_type_action(chatbot, update)
         name = update.message["chat"]["first_name"]
-        start_text = (
-            f"Olá, estou aqui para te lembrar de mandar sua daily todo dia! TODO. SANTO. DIA."
-        )
-        chatbot.send_message(
-            chat_id=update.message.chat_id,
-            text=start_text,
-            parse_mode=telegram.ParseMode.MARKDOWN,
-        )
-        return 0
+
+        with open("start.md") \
+                as start_file:
+            start_text = start_file.read()
+            chatbot.send_message(
+                chat_id=chat_id,
+                text=start_text,
+                parse_mode=telegram.ParseMode.MARKDOWN,
+            )
+            return 0
 
     def send_daily(self, chatbot, job):
         """
@@ -92,7 +94,7 @@ class Chatbot:
         """
         self.send_type_action(chatbot, update)
         self.logger.info("Example command received.")
-        with open("exemplo.md") \
+        with open("example.md") \
                 as example_file:
             example_text = example_file.read()
             print(example_text)
@@ -130,21 +132,33 @@ class Chatbot:
 
 
 if __name__ == "__main__":
-    # Variables set on Heroku
+    # Variables set on environment
     TOKEN = os.environ.get("TOKEN")
     NAME = os.environ.get("NAME")
-    # Port is given by Heroku
+    # Port is given by Heroku/ngrok
     PORT = os.environ.get("PORT")
+    LINK = os.environ.get("LINK")
     if TOKEN is not None:
         if PORT is not None:
-            bot = Chatbot(TOKEN)
+            bot = DailyBot(TOKEN)
             bot.updater.start_webhook(
                 listen="0.0.0.0",
                 port=int(PORT),
                 url_path=TOKEN)
-            bot.updater.bot.set_webhook(f"https://{NAME}.herokuapp.com/{TOKEN}")
+            if LINK:
+                bot.updater.bot.set_webhook(LINK)
+            else:
+                bot.updater.bot.set_webhook(f"https://{NAME}.herokuapp.com/{TOKEN}")
             bot.updater.idle()
         else:
-            # Run on local system once detected that it's not on Heroku
-            bot = Chatbot(TOKEN)
+            # Run on local system once detected that it's not on Heroku nor ngrok
+            bot = DailyBot(TOKEN)
             bot.run()
+    else:
+        HOUR = int(os.environ.get("HOUR"))
+        MINUTE = int(os.environ.get("MINUTE"))
+        print(f"Token {TOKEN}\n"
+              f"Port {PORT}\n"
+              f"Name {NAME}\n"
+              f"Hour {HOUR}\n"
+              f"Minute {MINUTE}\n")
