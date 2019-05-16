@@ -1,5 +1,7 @@
 # Daily Bot
 
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+
 This is a simple bot to remind Telegram groups about it's daily standup. It runs
 from monday to friday, but can run on different days too if you'd like.
 
