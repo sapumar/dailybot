@@ -1,7 +1,8 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/2f38b21c193d33baed6d/maintainability)](https://codeclimate.com/github/sapumar/dailybot/maintainability)
 ![License MIT](https://img.shields.io/badge/license-MIT-green.svg)
-![Open issues](https://img.shields.io/github/issues/sapumar/dailybot.svg)
-![Gitter](https://img.shields.io/gitter/room/sapumar/dailybot.svg?color=red)
+[![Open issues](https://img.shields.io/github/issues/sapumar/dailybot.svg)](https://github.com/sapumar/dailybot/issues)
+[![Gitter](https://img.shields.io/gitter/room/sapumar/dailybot.svg?color=red)](https://gitter.im/sapumar/dailybot)
+
 # Daily Bot
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
