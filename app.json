@@ -1,0 +1,7 @@
+{
+  "name": "Daily bot",
+  "description": "A Telegram bot to remind about stand ups",
+  "repository": "https://github.com/sapumar/dailybot",
+  "logo": "https://avatars1.githubusercontent.com/u/49998068",
+  "keywords": ["bot", "dailybot", "standup"]
+}
