@@ -42,3 +42,13 @@ And run the bot script
 ```commandline
 python dailybot.py
 ```
+
+## Changing default messages
+
+All message templates currently reside on `msg` folder, by editing those markdown files you're editing what the bot is saying.
+
+Brief overview of the files:
+- `start.md` - Template for start message command
+- `daily.md` - Template for daily message
+- `example.md` - Template for an example of a proper daily message
+- `error.md` - Template for error message when bot wasn't properly configured
