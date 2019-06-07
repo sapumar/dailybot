@@ -1,0 +1,1 @@
+Olá, {{name}}, estou aqui para te lembrar de mandar sua daily todo dia! TODO. SANTO. DIA.
