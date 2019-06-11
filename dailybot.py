@@ -24,7 +24,7 @@ class DailyBot:
         daily_hour = int(os.environ.get("HOUR"))
         daily_minute = int(os.environ.get("MINUTE"))
         daily_time = datetime.time(hour=daily_hour, minute=daily_minute)
-        self.job_daily = self.job.run_daily(self.send_daily, time=daily_time, days=(2, 4))
+        self.job_daily = self.job.run_daily(self.send_daily, time=daily_time, days=(0, 1, 2, 3, 4))
 
         start_handler = CommandHandler("start", self.send_start)
         self.dispatcher.add_handler(start_handler)
