@@ -1,1 +1,0 @@
-*Aviso*: chat atual não se encontra cadastrado para receber mensagem da daily.

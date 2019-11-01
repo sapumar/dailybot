@@ -6,6 +6,8 @@ from time import sleep
 import telegram
 from telegram.ext import Updater, CommandHandler
 
+from app.settings import *
+
 
 class DailyBot:
 
@@ -21,10 +23,7 @@ class DailyBot:
 
         self.job = self.updater.job_queue
 
-        daily_hour = int(os.environ.get("HOUR"))
-        daily_minute = int(os.environ.get("MINUTE"))
-        daily_time = datetime.time(hour=daily_hour, minute=daily_minute)
-        self.job_daily = self.job.run_daily(self.send_daily, time=daily_time, days=(0, 1, 2, 3, 4))
+        self.job_daily = self.job.run_daily(self.send_daily, time=DAILY_TIME, days=(0, 1, 2, 3, 4))
 
         start_handler = CommandHandler("start", self.send_start)
         self.dispatcher.add_handler(start_handler)
@@ -75,8 +74,6 @@ class DailyBot:
             except Exception as error:
                 self.logger.error(error)
         try:
-            chat_ids = os.environ.get("CHAT_ID").replace(" ", "")
-            chat_ids = chat_ids.split(",")
             chat_ids = [int(i) for i in chat_ids]
             if chat_id not in chat_ids:
                 with open("msg/error.md") as error:
@@ -96,8 +93,7 @@ class DailyBot:
         @BOT = information about the BOT
         @update = the user info.
         """
-        chat_ids = os.environ.get("CHAT_ID").replace(" ", "")
-        chat_ids = chat_ids.split(",")
+        chat_ids = [int(i) for i in chat_ids]
         for chat_id in chat_ids:
             self.logger.info(f"Sending daily to {chat_id}")
             with open("msg/daily.md") as daily_file:
@@ -154,12 +150,6 @@ class DailyBot:
 
 
 if __name__ == "__main__":
-    # Variables set on environment
-    TOKEN = os.environ.get("TOKEN")
-    NAME = os.environ.get("NAME")
-    # Port is given by Heroku/ngrok
-    PORT = os.environ.get("PORT")
-    LINK = os.environ.get("LINK")
     if TOKEN is not None:
         if PORT is not None:
             BOT = DailyBot(TOKEN)
