@@ -60,7 +60,7 @@ class DailyBot:
         else:
             name = update.message["from_user"]["first_name"]
 
-        with open("msg/start.md") as start_file:
+        with open(START_FILE) as start_file:
             try:
                 start_text = start_file.read()
                 start_text = start_text.replace("{{name}}", name)
@@ -94,7 +94,7 @@ class DailyBot:
         chat_ids = [int(i) for i in chat_ids]
         for chat_id in chat_ids:
             self.logger.info(f"Sending daily to {chat_id}")
-            with open("msg/daily.md") as daily_file:
+            with open(DAILY_FILE) as daily_file:
                 daily_text = daily_file.read()
                 chatbot.send_message(
                     chat_id=chat_id,
@@ -111,7 +111,7 @@ class DailyBot:
         """
         self.send_type_action(chatbot, update)
         self.logger.info("Example command received.")
-        with open("msg/example.md") as example_file:
+        with open(EXAMPLE_FILE) as example_file:
             example_text = example_file.read()
             print(example_text)
             chatbot.send_message(
