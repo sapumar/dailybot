@@ -1,12 +1,10 @@
-import datetime
 import logging
-import os
 from time import sleep
 
 import telegram
 from telegram.ext import Updater, CommandHandler
 
-from app.settings import *
+from settings import *
 
 
 class DailyBot:
