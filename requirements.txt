@@ -1,2 +1,2 @@
-python-telegram-bot==12.2.0
+python-telegram-bot==12.6.1
 flake8==3.7.9
